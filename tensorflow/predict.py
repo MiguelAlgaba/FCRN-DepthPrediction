@@ -44,13 +44,16 @@ def predict(model_data_path, image_path):
         init_new_vars_op = tf.variables_initializer(uninitialized_vars)
         sess.run(init_new_vars_op)
         
-        # Write the result to file
-        output = pred[0,:,:,0].astype(float)
-        output *= (255./output.max()).astype('uint8')
-        Image.fromarray(output, 'L').save("/tmp/output.png")
-        
         # Evalute the network for the given image
         pred = sess.run(net.get_output(), feed_dict={input_node: img})
+        
+        # Write the result to file
+        output = pred[0,:,:,0].astype(float)
+        output *= (1./output.max())
+        output *= (255.)
+        output = output.astype('uint8')
+        outImg = Image.fromarray(output, 'L')
+        outImg.save("/tmp/output.png")
         
         # Plot result
         fig = plt.figure()
