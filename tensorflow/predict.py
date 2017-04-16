@@ -49,8 +49,7 @@ def predict(model_data_path, image_path):
         
         # Write the result to file
         output = pred[0,:,:,0].astype(float)
-        output *= (1./output.max())
-        output *= (255.)
+        output *= (255./output.max())
         output = output.astype('uint8')
         outImg = Image.fromarray(output, 'L')
         outImg.save("/tmp/output.png")
